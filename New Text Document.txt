@@ -1,0 +1,107 @@
+create database mydb
+use mydb
+
+
+create table positon
+(
+	Id int identity primary key,
+	Name nvarchar(56) not null,
+)
+insert into positon(name)
+values('Exper'),('Maser'),('norma')
+select *from positon
+
+create table branch
+(
+Id int identity primary key,
+ad nvarchar (52) not null
+)
+Insert into branch(ad)
+values('Nizami'),('Yasamal'),('Xetai')
+
+create table workers
+(
+	Id int identity primary key ,
+	Name nvarchar(50) not null,
+	Surname nvarchar(60) default 'xxx',
+	FatherName nvarchar(50),
+	salary float check(salary>=0),
+	positon int references positon(Id),
+	branch int references branch(Id)
+)
+drop table workers
+--Inserts
+insert into workers(Name,Surname,FatherName,salary,positon,branch)
+values('William','Gates','Michaeil',2300,2,1),
+('Aqsin','Sadiqov','Kenan',3300,1,2),
+('Ruslan','Qasimov','Niyameddin',1300,3,3)
+
+create table prdoucts
+(
+Id int identity primary key,
+ad nvarchar (52) not null,
+alisqimymeti float,
+satiqsqiymeti float,
+)
+insert into prdoucts(ad,alisqimymeti,satiqsqiymeti)
+values('alma',1,1.2),('qarpiz',2,3.2),('yumruta',0.02,0.15),('kolbasa',5,15)
+
+create table sales
+(
+Id int identity primary key,
+prdoucts int references prdoucts(Id),
+workers int references workers(Id),
+SalesTime date
+)
+
+insert into sales(prdoucts,workers,SalesTime)
+values(1,1,'2022-04-12'),(2,2,'2022-02-12'),(3,3,'2022-04-19'),(1,2,'2022-04-15'),(2,1,'2022-04-19')
+
+
+--1
+select *from sales as S
+full outer  join prdoucts as M
+on
+s.Id=m.id
+
+
+
+
+--2 /Bütün satışların cəmini tap.
+SELECT COUNT(*) FROM prdoucts;
+
+--3 / Cari ayda məhsul satışından gələn yekun məbləği tap
+
+SELECT  sum(prdoucts.satiqsqiymeti) as 'Umui satis qiymet'
+FROM sales
+left outer JOIN prdoucts ON sales.Id = sales.Id
+SELECT MONTH(getdate()) AS "Present Month";
+
+
+
+--4/ Hər işçinin satdığı məhsul sayını tap
+SELECT sales.SalesTime , workers.name ,COUNT(*) sales ;
+FROM sales
+full outer JOIN workers ON sales.Id = sales.Id
+ORDER BY sales.SalesTime;
+SELECT COUNT(*) s
+
+
+--Testing
+
+--SELECT  sum(prdoucts.satiqsqiymeti) as 'Umui satis qiymet'
+--FROM sales
+--left outer JOIN prdoucts ON sales.Id = sales.Id
+--SELECT MONTH(getdate()) AS "Present Month";
+
+
+
+--SELECT MONTH('2022/04/25') AS Month;
+
+
+--select *from satis as S
+--full outer join isci as M
+--on
+--s.Id=m.id
+
+
